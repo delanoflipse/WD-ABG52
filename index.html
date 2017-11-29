@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- <link rel="stylesheet" href="css/index.css"> -->
+</head>
+
+<body>
+    <h1>Habitune</h1>
+    <h2>Add habit</h2>
+    <form class="add-habit">
+        <label for="add-habit-name">Name</label>
+        <input type="text" name="name" id="add-habit-name">
+        <br>
+        <label for="add-habit-type">Type</label>
+        <select name="tye" id="add-habit-type">
+            <option value="good">Good habit</option>
+            <option value="bad">Bad habit</option>
+        </select>
+        <br>
+        <label for="add-habit-frequency">Frequency</label>
+        <select name="tye" id="add-habit-frequency">
+            <option value="hourly">Hourly</option>
+            <option value="dialy">Daily</option>
+            <option value="weekdays">Only on weekdays</option>
+            <option value="weekly">Weekly</option>
+            <option value="montly">Montly</option>
+        </select>
+        <br>
+        <button type="submit">Add habit</button>
+    </form>
+
+    <h2>Habits</h2>
+    <form class="sort-habits">
+        <label for="sort-select">Sort habits based</label>
+        <select name="sort" id="sort-select">
+            <option value="0">Show best progres first</option>
+            <option value="1">Show worst progres first</option>
+        </select>
+    </form>
+
+    <table class="habits">
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Type</td>
+                <td>Frequency</td>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
