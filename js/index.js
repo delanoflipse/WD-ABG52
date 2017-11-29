@@ -40,14 +40,10 @@ var serverData = {
     ]
 }
 
-var App = {
-    habits: [],
-}
-
 function Habit(id, name, type, frequency, stats) {
     this.id = id || -1
     this.name = name || ""
-    this.goodHabit = type ? type == "good" : true
+    this.type = type
     this.frequency = frequency || "daily"
     this.stats = stats || {}
 
@@ -58,20 +54,15 @@ Habit.prototype.addDateEvent = function(date, value) {
     this.dates.push(new DateEvent(date, value))
 }
 
-function DateEvent(date, value) {
-    this.date = date
-    this.done = value || false
-}
-
-function parseServerData(data) {
-    var habits = data.habits
-
-    for (var x in habits) {
-        var habitData = habits[x]
-        App.habits.push(parseHabit(habitData))
+Habit.prototype.getScore = function() {
+    var score = 0
+    for (var key in this.dates) {
+        var date = this.dates[key]
+        if (date.done) {
+            score++
+        }
     }
-
-    console.log(App)
+    return score
 }
 
 function parseHabit(data) {
@@ -84,41 +75,127 @@ function parseHabit(data) {
     return habit
 }
 
-function renderHabits() {
-    var $el = $("table.habits tbody")
-    $el.empty()
-
-    for (var index in App.habits) {
-        var habit = App.habits[index]
-        $el.append(renderHabit(habit))
-    }
+function DateEvent(date, value) {
+    this.date = date
+    this.done = value || false
 }
 
-function renderHabit(habit) {
-    var $base = render.tr().addClass("habit").attr("data-habit-id", habit.id)
-    $base.append(render.td(habit.name))
-    $base.append(render.td(habit.goodHabit ? "Good habit" : "Bad habit"))
-    $base.append(render.td(habit.frequency))
-
-    for (var index in habit.dates) {
-        var dateEvent = habit.dates[index]
-        $base.append(render.td(dateEvent.date + "(" + (dateEvent.done ? "+" : "-") + ")"))
+function isNullForm(data, keys) {
+    for (var index in keys) {
+        var key = keys[index]
+        if (!data[key] || data[key] == "") {
+            return true
+        }
     }
 
-    $base.append(render.td("streak: " + habit.stats.streak))
-
-    return $base
+    return false
 }
 
-var render = {
-    tr() {
-        return $("<tr>")
-    },
+function clearForm(data) {
+    for (var index in data) {
+        data[index] = ""
+    }
 
-    td(text) {
-        return $("<td>").text(text || "")
-    },
+    return false
 }
 
-parseServerData(serverData)
-renderHabits()
+var app = new Vue({
+    el: "#app",
+    data: {
+        habits: [],
+        forms: {
+            addForm: {
+                showForm: "",
+                text: "",
+                type: "",
+                frequency: "",
+                error: "",
+            },
+
+            sortType: "0",
+
+            editHabit: {
+                habit: null,
+                showForm: "",
+            }
+        }
+    },
+
+    methods: {
+        addHabit() {
+            if (isNullForm(this.forms.addForm, ["text", "frequency", "type"])) {
+                this.forms.addForm.error = "Please fill all values"
+                return
+            }
+
+            // server-side imitiation currently
+            console.log(this.forms.addForm.type)
+            this.habits.push(new Habit(
+                this.forms.addForm.text + "-" + this.forms.addForm.type, 
+                this.forms.addForm.text,
+                this.forms.addForm.type,
+                this.forms.addForm.frequency,
+                {
+                    streak: 0,
+                    bestStreak: 0,
+                    completions: 0,
+                },
+            ))
+
+            this.sort()
+
+            clearForm(this.forms.addForm)
+        },
+
+        sort() {
+            var self = this
+            var sortType = Number(this.forms.sortType)
+            this.habits = this.habits.sort(function(a, b) {
+                switch (sortType) {
+                    case 0:
+                        var textA = a.name.toUpperCase()
+                        var textB = b.name.toUpperCase()
+                        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                        break;
+                    case 1:
+                        return b.getScore() - a.getScore()
+                        break;
+                    case 2:
+                        return a.getScore() - b.getScore()
+                        break;
+                    default:
+                        return 0
+                        break;
+                }
+            })
+        },
+
+        removeHabit(id) {
+            for (var key in this.habits) {
+                if (this.habits[key].id == id) {
+                    this.habits.splice(key, 1)
+                    return
+                }
+            }
+        },
+
+        editHabit(habit) {
+            this.forms.editHabit.habit = habit
+            this.forms.editHabit.showForm = "true"
+        },
+
+        toggleDate(date) {
+            date.done = !date.done
+            this.sort()
+        }
+    },
+
+    mounted() {
+        for (var x in serverData.habits) {
+            var habitData = serverData.habits[x]
+            this.habits.push(parseHabit(habitData))
+        }
+        this.sort()
+    }
+})
+

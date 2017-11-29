@@ -8,57 +8,99 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- <link rel="stylesheet" href="css/index.css"> -->
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
-    <h1>Habitune</h1>
-    <h2>Add habit</h2>
-    <form class="add-habit">
-        <label for="add-habit-name">Name</label>
-        <input type="text" name="name" id="add-habit-name">
-        <br>
-        <label for="add-habit-type">Type</label>
-        <select name="tye" id="add-habit-type">
-            <option value="good">Good habit</option>
-            <option value="bad">Bad habit</option>
-        </select>
-        <br>
-        <label for="add-habit-frequency">Frequency</label>
-        <select name="tye" id="add-habit-frequency">
-            <option value="hourly">Hourly</option>
-            <option value="dialy">Daily</option>
-            <option value="weekdays">Only on weekdays</option>
-            <option value="weekly">Weekly</option>
-            <option value="montly">Montly</option>
-        </select>
-        <br>
-        <button type="submit">Add habit</button>
-    </form>
-
-    <h2>Habits</h2>
-    <form class="sort-habits">
-        <label for="sort-select">Sort habits based</label>
-        <select name="sort" id="sort-select">
-            <option value="0">Show best progres first</option>
-            <option value="1">Show worst progres first</option>
-        </select>
-    </form>
-
-    <table class="habits">
-        <thead>
-            <tr>
-                <td>Name</td>
-                <td>Type</td>
-                <td>Frequency</td>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div id="app" v-cloak>
+        <h1>Habitune</h1>
+        <h2>Add habit</h2>
+        <button v-if="forms.addForm.showForm == ''" v-on:click="forms.addForm.showForm = 'true'">Add habit</button>
+        <form class="add-habit" v-on:submit.prevent="addHabit" v-else="forms.addForm.showForm != ''">
+            <p class="error">{{forms.addForm.error}}</p>
+            <label for="add-habit-name">Name</label>
+            <input type="text" name="name" id="add-habit-name" v-model="forms.addForm.text">
+            <br>
+            <label for="add-habit-type">Type</label>
+            <select name="type" id="add-habit-type" v-model="forms.addForm.type">
+                <option value="good">Good habit</option>
+                <option value="bad">Bad habit</option>
+            </select>
+            <br>
+            <label for="add-habit-frequency">Frequency</label>
+            <select name="frequency" id="add-habit-frequency" v-model="forms.addForm.frequency">
+                <option value="hourly">Hourly</option>
+                <option value="daily">Daily</option>
+                <option value="weekdays">Only on weekdays</option>
+                <option value="weekly">Weekly</option>
+                <option value="montly">Montly</option>
+            </select>
+            <br>
+            <button type="submit">Add habit</button>
+        </form>
     
+        <h2>Habits</h2>
+        <form class="sort-habits">
+            <label for="sort-select">Sort habits based</label>
+            <select name="sort" id="sort-select" v-model="forms.sortType" v-on:change="sort">
+                <option value="0">Sort by name</option>
+                <option value="1">Show best progres first</option>
+                <option value="2">Show worst progres first</option>
+            </select>
+        </form>
+    
+        <table class="habits">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Type</td>
+                    <td>Frequency</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="habit" v-for="habit in habits">
+                    <td>{{habit.name}}</td>
+                    <td>{{habit.type == "good" ? "Good habit": "Bad habit"}}</td>
+                    <td>{{habit.frequency}}</td>
+                    <td v-for="date in habit.dates" v-on:click="toggleDate(date)">{{date.date}}{{date.done ? " - done" : ""}}</td>
+                    <td>Streak: {{habit.stats.streak}}</td>
+                    <td>
+                        <button v-on:click="removeHabit(habit.id)">Remove habit</button>
+                    </td>
+                    <td>
+                        <button v-on:click="editHabit(habit)">Edit habit</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <form class="add-habit" v-on:submit.prevent="" v-if="forms.editHabit.showForm != ''">
+            <p class="error">{{forms.editHabit.error}}</p>
+            <label for="add-habit-name">Name</label>
+            <input type="text" name="name" id="add-habit-name" v-model="forms.editHabit.habit.name">
+            <br>
+            <label for="add-habit-type">Type</label>
+            <select name="type" id="add-habit-type" v-model="forms.editHabit.habit.type">
+                <option value="good">Good habit</option>
+                <option value="bad">Bad habit</option>
+            </select>
+            <br>
+            <label for="add-habit-frequency">Frequency</label>
+            <select name="frequency" id="add-habit-frequency" v-model="forms.editHabit.habit.frequency">
+                <option value="hourly">Hourly</option>
+                <option value="daily">Daily</option>
+                <option value="weekdays">Only on weekdays</option>
+                <option value="weekly">Weekly</option>
+                <option value="montly">Montly</option>
+            </select>
+            <br>
+            <button v-on:click="forms.editHabit.showForm = ''; sort()">close</button>
+        </form>
+
+    </div>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.9/vue.min.js"></script>
     <script src="js/index.js"></script>
 </body>
 
