@@ -1,0 +1,22 @@
+{
+  "name": "wd-abg52",
+  "version": "1.0.0",
+  "description": "WD ABG group 52",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delanoflipse/WD-ABG52.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/delanoflipse/WD-ABG52/issues"
+  },
+  "homepage": "https://github.com/delanoflipse/WD-ABG52#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}

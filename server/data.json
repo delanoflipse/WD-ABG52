@@ -1,0 +1,41 @@
+{
+    "habits": [
+        {
+            "id": 1,
+            "name": "Go swimming",
+            "type": "good",
+            "frequency": "daily",
+            "dates": {
+                "26/11/2017": false,
+                "27/11/2017": true,
+                "28/11/2017": true,
+                "29/11/2017": false,
+                "30/11/2017": false
+            },
+            "stats": {
+                "streak": 2,
+                "bestStreak": 6,
+                "completions": 3
+            }
+        },
+
+        {
+            "id": 2,
+            "name": "Go running",
+            "type": "good",
+            "frequency": "daily",
+            "dates": {
+                "26/11/2017": false,
+                "27/11/2017": false,
+                "28/11/2017": true,
+                "29/11/2017": false,
+                "30/11/2017": false
+            },
+            "stats": {
+                "streak": 1,
+                "bestStreak": 3,
+                "completions": 1
+            }
+        }
+    ]
+}

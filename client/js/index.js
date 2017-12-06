@@ -43,7 +43,7 @@ var serverData = {
 function Habit(id, name, type, frequency, stats) {
     this.id = id || -1
     this.name = name || ""
-    this.type = type
+    this.type = type || false
     this.frequency = frequency || "daily"
     this.stats = stats || {}
 
@@ -56,12 +56,14 @@ Habit.prototype.addDateEvent = function(date, value) {
 
 Habit.prototype.getScore = function() {
     var score = 0
+
     for (var key in this.dates) {
         var date = this.dates[key]
         if (date.done) {
             score++
         }
     }
+
     return score
 }
 
@@ -129,7 +131,6 @@ var app = new Vue({
             }
 
             // server-side imitiation currently
-            console.log(this.forms.addForm.type)
             this.habits.push(new Habit(
                 this.forms.addForm.text + "-" + this.forms.addForm.type, 
                 this.forms.addForm.text,
@@ -195,6 +196,7 @@ var app = new Vue({
             var habitData = serverData.habits[x]
             this.habits.push(parseHabit(habitData))
         }
+        
         this.sort()
     }
 })

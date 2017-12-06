@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
-    <meta name="description" content="">
+    <title>Habitune</title>
+    <meta name="description" content="A habit tracker">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="css/index.css">
@@ -15,7 +15,9 @@
     <div id="app" v-cloak>
         <h1>Habitune</h1>
         <h2>Add habit</h2>
+
         <button v-if="forms.addForm.showForm == ''" v-on:click="forms.addForm.showForm = 'true'">Add habit</button>
+        
         <form class="add-habit" v-on:submit.prevent="addHabit" v-else="forms.addForm.showForm != ''">
             <p class="error">{{forms.addForm.error}}</p>
             <label for="add-habit-name">Name</label>
@@ -38,7 +40,7 @@
             <br>
             <button type="submit">Add habit</button>
         </form>
-    
+
         <h2>Habits</h2>
         <form class="sort-habits">
             <label for="sort-select">Sort habits based</label>
@@ -48,7 +50,7 @@
                 <option value="2">Show worst progres first</option>
             </select>
         </form>
-    
+
         <table class="habits">
             <thead>
                 <tr>
