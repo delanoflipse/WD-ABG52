@@ -1,3 +1,266 @@
-[v-cloak] {
+@import url("https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700|Roboto:300,400,500,700");
+
+* {
+    box-sizing: border-box;
+}
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto";
+}
+body {
+    display: block;
+    background: #F0EBD8;
+    color: #333;
+}
+body.no-scroll {
+    overflow: hidden;
+}
+.hide {
     display: none !important;
+}
+.container {
+    max-width: 1200px;
+    margin: 0px auto;
+}
+header {
+    background: #103C63;
+    margin: 0;
+    margin-bottom: 36px;
+    padding: 16px;
+    color: white;
+}
+header h1 {
+    margin: 0;
+    padding: 0;
+    flex: 1;
+}
+header .container {
+    display: flex;
+    align-items: center;
+}
+.tracker .header {
+    padding-left: 200px;
+    display: flex;
+    border-bottom: 1px solid #F0EBD8;
+}
+.tracker .header .days {
+    flex: 1;
+    display: flex;
+}
+.tracker .header .days .day {
+    flex: 1;
+    padding: 4px;
+    text-align: center;
+    background: white;
+    border-right: 1px solid #F0EBD8;
+}
+.tracker .header .days .day .day-date {
+    text-transform: uppercase;
+    font-size: 12px;
+    display: inline-block;
+    margin: 0 4px;
+}
+.tracker .header .days .day .day-name {
+    font-size: 18px;
+    color: black;
+}
+.tracker .habits .habit {
+    display: flex;
+    height: 49px;
+    border-bottom: 1px solid #F0EBD8;
+}
+.tracker .habits .habit .title {
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 1px solid #F0EBD8;
+    text-align: right;
+    cursor: pointer;
+}
+.tracker .habits .habit .title span {
+    display: inline-block;
+    height: 100%;
+    background: white;
+    padding: 0 12px;
+    line-height: 48px;
+}
+.tracker .habits .habit .days {
+    display: flex;
+    flex: 1;
+}
+.tracker .habits .habit .days .day {
+    background: white;
+    height: 48px;
+    flex: 1;
+    border-right: 1px solid #F0EBD8;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.1s;
+}
+.tracker .habits .habit .days .day.done {
+    background: #103C63;
+    border-right: 1px solid #144979;
+}
+.tracker .habits .habit .days .day.done .cover {
+    color: white;
+}
+.tracker .habits .habit .days .day.done .cover:after {
+    content: "Undo";
+}
+.tracker .habits .habit .days .day.done:hover .cover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+.tracker .habits .habit .days .day.done:active .cover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
+}
+.tracker .habits .habit .days .day .cover {
+    transition: all 0.1s;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.tracker .habits .habit .days .day .cover:after {
+    content: "Done";
+}
+.tracker .habits .habit .days .day:hover .cover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+.tracker .habits .habit .days .day:active .cover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.15);
+}
+.tracker .sorting-field {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+.tracker .sorting-field label {
+    display: block;
+    margin: 0 8px;
+}
+.tracker .sorting-field select {
+    padding: 4px 8px;
+}
+.tracker .add-habit {
+    display: flex;
+    height: 48px;
+}
+.tracker .add-habit .sizer {
+    display: flex;
+    height: 48px;
+    justify-content: flex-end;
+    align-items: center;
+    width: 200px;
+}
+.tracker .add-habit .add-habit-button {
+    display: block;
+    height: 48px;
+    line-height: 48px;
+    padding: 0 16px;
+    cursor: pointer;
+    transition: all 0.1s;
+    background: inherit;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+.tracker .add-habit .add-habit-button:hover {
+    background: #103C63;
+    color: white;
+}
+.tracker .add-habit .habit-text {
+    display: flex;
+    height: 48px;
+    align-items: center;
+    padding: 0 16px;
+}
+.tracker .add-habit .habit-text input {
+    border: none;
+    padding: 8px;
+}
+.edit-habit {
+    padding-bottom: 20px;
+}
+.edit-habit h2 {
+    font-size: 32px;
+}
+.edit-habit .form-field {
+    display: flex;
+    margin: 10px 0;
+}
+.edit-habit .form-field label {
+    padding: 4px 10px;
+    width: 100px;
+    text-align: right;
+}
+.edit-habit button {
+    background: #103C63;
+    color: white;
+    font-family: inherit;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+.edit-habit button.remove {
+    background: rgb(99, 16, 16);
+}
+.edit-habit button:hover {
+    background: #0D1321;
+}
+.edit-habit input,
+.edit-habit select {
+    padding: 4px;
+}
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.splash {
+    position: fixed;
+    background: #F0EBD8;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    display: flex;
+    z-index: 999999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.splash img {
+    margin: 10px;
+}
+.splash .spinner {
+    width: 64px;
+    height: 64px;
+    border: 8px solid #103C63;
+    border-radius: 100%;
+    border-right: 8px solid #F0EBD8;
+    border-left: 8px solid #F0EBD8;
+    animation-name: rotate;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
 }

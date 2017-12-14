@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,102 +7,103 @@
     <title>Habitune</title>
     <meta name="description" content="A habit tracker">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link rel="stylesheet" href="css/index.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="theme-color" content="#FFFFFFF">
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        <h1>Habitune</h1>
-        <h2>Add habit</h2>
-
-        <button v-if="forms.addForm.showForm == ''" v-on:click="forms.addForm.showForm = 'true'">Add habit</button>
-        
-        <form class="add-habit" v-on:submit.prevent="addHabit" v-else="forms.addForm.showForm != ''">
-            <p class="error">{{forms.addForm.error}}</p>
-            <label for="add-habit-name">Name</label>
-            <input type="text" name="name" id="add-habit-name" v-model="forms.addForm.text">
-            <br>
-            <label for="add-habit-type">Type</label>
-            <select name="type" id="add-habit-type" v-model="forms.addForm.type">
-                <option value="good">Good habit</option>
-                <option value="bad">Bad habit</option>
-            </select>
-            <br>
-            <label for="add-habit-frequency">Frequency</label>
-            <select name="frequency" id="add-habit-frequency" v-model="forms.addForm.frequency">
-                <option value="hourly">Hourly</option>
-                <option value="daily">Daily</option>
-                <option value="weekdays">Only on weekdays</option>
-                <option value="weekly">Weekly</option>
-                <option value="montly">Montly</option>
-            </select>
-            <br>
-            <button type="submit">Add habit</button>
-        </form>
-
-        <h2>Habits</h2>
-        <form class="sort-habits">
-            <label for="sort-select">Sort habits based</label>
-            <select name="sort" id="sort-select" v-model="forms.sortType" v-on:change="sort">
-                <option value="0">Sort by name</option>
-                <option value="1">Show best progres first</option>
-                <option value="2">Show worst progres first</option>
-            </select>
-        </form>
-
-        <table class="habits">
-            <thead>
-                <tr>
-                    <td>Name</td>
-                    <td>Type</td>
-                    <td>Frequency</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="habit" v-for="habit in habits">
-                    <td>{{habit.name}}</td>
-                    <td>{{habit.type == "good" ? "Good habit": "Bad habit"}}</td>
-                    <td>{{habit.frequency}}</td>
-                    <td v-for="date in habit.dates" v-on:click="toggleDate(date)">{{date.date}}{{date.done ? " - done" : ""}}</td>
-                    <td>Streak: {{habit.stats.streak}}</td>
-                    <td>
-                        <button v-on:click="removeHabit(habit.id)">Remove habit</button>
-                    </td>
-                    <td>
-                        <button v-on:click="editHabit(habit)">Edit habit</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <form class="add-habit" v-on:submit.prevent="" v-if="forms.editHabit.showForm != ''">
-            <p class="error">{{forms.editHabit.error}}</p>
-            <label for="add-habit-name">Name</label>
-            <input type="text" name="name" id="add-habit-name" v-model="forms.editHabit.habit.name">
-            <br>
-            <label for="add-habit-type">Type</label>
-            <select name="type" id="add-habit-type" v-model="forms.editHabit.habit.type">
-                <option value="good">Good habit</option>
-                <option value="bad">Bad habit</option>
-            </select>
-            <br>
-            <label for="add-habit-frequency">Frequency</label>
-            <select name="frequency" id="add-habit-frequency" v-model="forms.editHabit.habit.frequency">
-                <option value="hourly">Hourly</option>
-                <option value="daily">Daily</option>
-                <option value="weekdays">Only on weekdays</option>
-                <option value="weekly">Weekly</option>
-                <option value="montly">Montly</option>
-            </select>
-            <br>
-            <button v-on:click="forms.editHabit.showForm = ''; sort()">close</button>
-        </form>
-
+    <div class="splash">
+        <img src="img/logo.svg" alt="logo">
+        <div class="spinner"></div>
     </div>
+    <header>
+        <div class="container">
+            <h1>Habitune</h1>
+            <div class="user">
+                <span>uitloggen</span>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container tracker">
+            <form class="sorting-field">
+                <label for="sort-field-select">Sort habit by:</label>
+                <select id="sort-field-select">
+                    <option value="0">Name</option>
+                    <option value="1">Best progress</option>
+                    <option value="2">Worst progress</option>
+                </select>
+            </form>
+            
+            <div class="day" data-template-id="habit-day-header">
+                <div class="day-date">
+                    <span class="day-index">{{= this.day}}</span>
+                    <span class="month"> {{= this.month}}</span>
+                </div>
+                <div class="day-name">{{= this.dayname}}</div>
+            </div>
+
+            <div class="header">
+                <div class="days">
+                </div>
+            </div>
+
+            <div class="day{{= this.done ? ' done' : ''  }}" data-template-id="habit-day">
+                <div class="cover"></div>
+            </div>
+
+            <div class="habits">
+                <div class="habit" data-template-id="habit">
+                    <div class="title" title="{{= this.title}}">
+                        <span>{{= this.title}}</span>
+                    </div>
+                    <div class="days">
+                    </div>
+                </div>
+            </div>
+
+            <form class="add-habit">
+                <div class="sizer">
+                    <button class="add-habit-button" type="submit">+ Add habit</button>
+                </div>
+                <div class="habit-text">
+                    <input type="text" name="title" placeholder="Habit name">
+                </div>
+            </form>
+        </div>
+        <div class="edit-habit-container">
+            <form class="container edit-habit template" data-template-id="edit-habit-form">
+                <h2>Edit habit</h2>
+                <div class="form-field">
+                    <label for="edit-habit-title">Name</label>
+                    <input id="edit-habit-title" type="text" name="title" value="{{= this.title }}">
+                </div>
+                <!-- <div class="form-field">
+                    <label for="edit-habit-freq">Frequency</label>
+                    <select id="edit-habit-freq">
+                        <option>Daily</option>
+                        <option>Weekdays only</option>
+                        <option>Weekly</option>
+                        <option>Monthly</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="edit-habit-type">Type</label>
+                    <select id="edit-habit-type">
+                        <option>Good habit</option>
+                        <option>Bad habit</option>
+                    </select>
+                </div> -->
+
+                <button class="remove">Delete habit</button>
+
+                <button class="save" type="submit">Save</button>
+            </form>
+        </div>
+    </main>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.9/vue.min.js"></script>
     <script src="js/index.js"></script>
 </body>
 

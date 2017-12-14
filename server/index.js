@@ -6,19 +6,26 @@ const Habit = require('./habit')
 let data = require('./data.json')
 let app = new express()
 
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.static("client"))
 
+let dataVersion = 0
+
 app.get("/api/getHabits", (req, res) => {
-    res.send(getAllHabits())
+    res.send({
+        habits: getAllHabits(),
+        version: dataVersion,
+    })
 })
 
 app.post("/api/addHabit", (req, res) => {
     let id = ++data.idCount
     let body = req.body
     let habit = new Habit()
+    let frequency = body.frequency || 0
 
-    if (body && body.title && body.frequency) {
+    if (body && body.title) {
         habit.fillProperties(body)
         habit.id = id
     } else {
@@ -31,15 +38,17 @@ app.post("/api/addHabit", (req, res) => {
     }
 
     data.habits.push(habit)
+    dataVersion++
 
     res.send({
         "error": null,
         succes: true,
+        habit: habit
     })
 })
 
-app.post("/api/updateHabit/:id", (req, res) => {
-    let habit = getHabit(req.params.id)
+app.post("/api/updateHabit", (req, res) => {
+    let habit = getHabit(req.body.id)
 
     if (!habit) {
         res.send({
@@ -51,6 +60,7 @@ app.post("/api/updateHabit/:id", (req, res) => {
     }
 
     habit.fillProperties(req.body)
+    dataVersion++
 
     res.send({
         "error": null,
@@ -58,8 +68,44 @@ app.post("/api/updateHabit/:id", (req, res) => {
     })
 })
 
-app.get("/api/deleteHabit/:id", (req, res) => {
-    let succes = deleteHabit(req.params.id)
+app.post("/api/toggleHabit", (req, res) => {
+    let habit = getHabit(Number(req.body.id))
+    let date = req.body.date
+
+    if (!habit || !date) {
+        res.send({
+            "error": "habit does not exist",
+            succes: false,
+        })
+
+        return
+    }
+    dataVersion++
+
+    res.send({
+        error: null,
+        succes: true,
+        value: habit.toggleDate(date),
+    })
+})
+
+
+app.post("/api/poll", (req, res) => {
+    if (req.body && req.body.version && req.body.version != dataVersion) {
+        res.send({
+            habits: getAllHabits(),
+            version: dataVersion,
+            dirty: true,
+        })
+    } else {
+        res.send({
+            dirty: false,
+        })
+    }
+})
+
+app.post("/api/deleteHabit", (req, res) => {
+    let succes = deleteHabit(req.body.id)
 
     if (!succes) {
         res.send({
@@ -69,6 +115,7 @@ app.get("/api/deleteHabit/:id", (req, res) => {
 
         return
     }
+    dataVersion++
 
     res.send({
         "error": null,
@@ -76,46 +123,41 @@ app.get("/api/deleteHabit/:id", (req, res) => {
     })
 })
 
-app.listen(8000, () => {
+app.listen(8080, () => {
     console.log("server running on port 8080")
 })
 
-function getAllHabits() {
-    let habits = []
-    
-    data.habits.forEach(x => {
-        let h = new Habit()
-        h.fillProperties(x)
-        habits.push(h)
-    })
+data.habits = data.habits.map(x => {
+    let h = new Habit()
+    h.fillProperties(x)
+    return h
+})
 
-    return habits
+function getAllHabits() {
+    return data.habits
 }
 
 function getHabit(id) {
-    data.habits.forEach(x => {
-        let h = new Habit()
-        h.fillProperties(x)
+    for (let key in data.habits) {
+        let x = data.habits[key]
 
-        if (h.id == id) {
-            return h
+        if (x.id == id) {
+            return x
         }
-    })
+    }
 
     return null
 }
 
-
 function deleteHabit(id) {
-    data.habits.forEach((x, i) => {
-        let h = new Habit()
-        h.fillProperties(x)
+    for (let key in data.habits) {
+        let x = data.habits[key]
 
-        if (h.id == id) {
-            data.habits.splice(i, 1)
+        if (x.id == id) {
+            data.habits.splice(key, 1)
             return true
         }
-    })
+    }
 
     return false
 }

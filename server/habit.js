@@ -22,6 +22,17 @@ class Habit {
             }
         }
     }
+
+    toggleDate(date) {
+        let index = this.dones.indexOf(date)
+        if (index > -1) {
+            this.dones.splice(index, 1)
+            return false
+        } else {
+            this.dones.push(date)
+            return true
+        }
+    }
 }
 
 module.exports = Habit
