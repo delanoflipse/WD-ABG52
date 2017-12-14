@@ -1,41 +1,48 @@
 {
+    "idCount": 2,
     "habits": [
         {
-            "id": 1,
-            "name": "Go swimming",
-            "type": "good",
+            "id": 0,
+            "title": "Go swimming",
+            "description": null,
+            "creationDate": "2017-01-01",
             "frequency": "daily",
-            "dates": {
-                "26/11/2017": false,
-                "27/11/2017": true,
-                "28/11/2017": true,
-                "29/11/2017": false,
-                "30/11/2017": false
-            },
-            "stats": {
-                "streak": 2,
-                "bestStreak": 6,
-                "completions": 3
-            }
+            "dayOfWeek": null,
+            "partOfWeek": null,
+            "dones": [
+                "2017-12-05",
+                "2017-12-09",
+                "2017-12-11",
+                "2017-12-12"
+            ]
         },
-
+        {
+            "id": 1,
+            "title": "Go running",
+            "description": null,
+            "creationDate": "2017-01-01",
+            "frequency": "weekly",
+            "dayOfWeek": "monday",
+            "partOfWeek": null,
+            "dones": [
+                "2017-11-27",
+                "2017-12-11"
+            ]
+        },
         {
             "id": 2,
-            "name": "Go running",
-            "type": "good",
+            "title": "Go do something",
+            "description": null,
+            "creationDate": "2017-01-01",
             "frequency": "daily",
-            "dates": {
-                "26/11/2017": false,
-                "27/11/2017": false,
-                "28/11/2017": true,
-                "29/11/2017": false,
-                "30/11/2017": false
-            },
-            "stats": {
-                "streak": 1,
-                "bestStreak": 3,
-                "completions": 1
-            }
+            "dayOfWeek": null,
+            "partOfWeek": null,
+            "dones": [
+                "2017-12-05",
+                "2017-12-09",
+                "2017-12-11",
+                "2017-12-12"
+            ]
         }
     ]
 }
