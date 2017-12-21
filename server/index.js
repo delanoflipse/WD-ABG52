@@ -38,7 +38,7 @@ app.post("/api/addHabit", (req, res) => {
     }
 
     data.habits.push(habit)
-    dataVersion++
+    setDirty()
 
     res.send({
         "error": null,
@@ -60,7 +60,7 @@ app.post("/api/updateHabit", (req, res) => {
     }
 
     habit.fillProperties(req.body)
-    dataVersion++
+    setDirty()
 
     res.send({
         "error": null,
@@ -80,7 +80,7 @@ app.post("/api/toggleHabit", (req, res) => {
 
         return
     }
-    dataVersion++
+    setDirty()
 
     res.send({
         error: null,
@@ -115,7 +115,8 @@ app.post("/api/deleteHabit", (req, res) => {
 
         return
     }
-    dataVersion++
+
+    setDirty()
 
     res.send({
         "error": null,
@@ -133,11 +134,19 @@ data.habits = data.habits.map(x => {
     return h
 })
 
+function setDirty() {
+    dataVersion++
+}
+
 function getAllHabits() {
     return data.habits
 }
 
 function getHabit(id) {
+    if (id == null) {
+        return null
+    }
+
     for (let key in data.habits) {
         let x = data.habits[key]
 
@@ -150,6 +159,10 @@ function getHabit(id) {
 }
 
 function deleteHabit(id) {
+    if (id == null) {
+        return false
+    }
+
     for (let key in data.habits) {
         let x = data.habits[key]
 
